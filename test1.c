@@ -1,44 +1,45 @@
 #include <stdio.h>
-#define N 3 // 행렬의 크기 (3x3 행렬을 가정)
-// 두 정방행렬의 곱셈 함수
-void matrix_multiply(int mat1[][N], int mat2[][N], int result[][N]) {
-    int i, j, k;
-    for (i = 0; i < N; i++) {
-        for (j = 0; j < N; j++) {
-            result[i][j] = 0;
-            for (k = 0; k < N; k++) {
-                result[i][j] += mat1[i][k] * mat2[k][j];
-            }
+
+// 이분 검색 함수
+int binarySearch(int arr[], int low, int high, int target, int *count) {
+    while (low <= high) {
+        (*count)++; // 수행 횟수 증가
+
+        int mid = low + (high - low) / 2;
+
+        // 중간 값이 타겟인지 확인
+        if (arr[mid] == target) {
+            return mid;
+        }
+        // 중간 값이 타겟보다 작으면 오른쪽 부분을 탐색
+        else if (arr[mid] < target) {
+            low = mid + 1;
+        }
+        // 중간 값이 타겟보다 크면 왼쪽 부분을 탐색
+        else {
+            high = mid - 1;
         }
     }
-}
-// 행렬을 출력하는 함수
-void print_matrix(int mat[][N]) {
-    int i, j;
-    for (i = 0; i < N; i++) {
-        for (j = 0; j < N; j++) {
-            printf("%d ", mat[i][j]);
-        }
-        printf("\n");
-    }
+    // 타겟을 찾지 못한 경우
+    return -1;
 }
 
 int main() {
-    int mat1[N][N] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-    int mat2[N][N] = {{9, 8, 7}, {6, 5, 4}, {3, 2, 1}};
+    int arr[] = {1, 3, 5, 7, 9, 11, 13, 15, 17, 19};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int target = 13;
+    int count = 0; // 수행 횟수 초기화
 
+    // 이분 검색 수행
+    int result = binarySearch(arr, 0, n - 1, target, &count);
 
-    int result[N][N];
-
-    printf("첫 번째 행렬:\n");
-    print_matrix(mat1);
-    printf("\n두 번째 행렬:\n");
-    print_matrix(mat2);
-
-    matrix_multiply(mat1, mat2, result);
-
-    printf("\n행렬의 곱셈 결과:\n");
-    print_matrix(result);
+    if (result != -1) {
+        printf("원소 %d를 %d번째에서 찾았습니다.\n", target, result + 1);
+        printf("이분 검색이 %d번 수행되었습니다.\n", count);
+    } else {
+        printf("원소를 찾을 수 없습니다.\n");
+    }
 
     return 0;
 }
+
